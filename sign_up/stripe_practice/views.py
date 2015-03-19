@@ -11,26 +11,6 @@ from flask import current_app as app
 
 
 stripe_practice = Blueprint("stripe_practice", __name__)
-#
-@stripe_practice.route('/charge', methods=['POST'])
-def charge():
-    # Amount in cents
-    amount = 500
-
-    customer = stripe.Customer.create(
-        email='customer@example.com',
-        card=request.form['stripeToken']
-    )
-
-    charge = stripe.Charge.create(
-        customer=customer.id,
-        amount=amount,
-        currency='usd',
-        description='Flask Charge'
-    )
-
-    return render_template('charge.html', amount=amount)
-
 
 @stripe_practice.route('/')
 def index():
@@ -53,7 +33,7 @@ def authorize():
 def callback():
   code   = request.args.get('code')
   data   = {
-             'client_secret': app.config.get('client_secret'),
+             'client_secret': app.config.get('CLIENT_SECRET'),
              'grant_type': 'authorization_code',
              'client_id': app.config.get('CLIENT_ID'),
              'code': code
